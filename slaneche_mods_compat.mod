@@ -6,3 +6,4 @@ tags={
 name="Slaneche's Auto Mods Compatibility Patches"
 supported_version="1.7.*"
 path="mod/slaneche_mods_compat"
+remote_file_id="2864247209"
