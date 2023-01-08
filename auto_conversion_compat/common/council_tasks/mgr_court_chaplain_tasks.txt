@@ -6,7 +6,6 @@
 	ai_county_target = realm
 	task_progress = task_progress_percentage
 	highlight_own_realm = yes
-	restart_on_finish = no
 
 	effect_desc = {
 		desc = task_conversion_effect_desc
@@ -171,6 +170,7 @@
 				desc = council_toledo_heresies_task_desc
 			}
 		}
+		
 		# Conversion speed game rules
 		if = {
 			limit = {
@@ -534,24 +534,6 @@
 				scope:councillor_liege = { has_variable = false_convert }
 			}
 			multiply = 0
-		}
-	}
-	on_cancel_task_county = {
-		if = {
-			limit = {
-				OR = {
-					scope:county.faith = scope:councillor_liege.faith
-					NOT = {
-						OR = {
-							scope:county.holder = {
-								is_vassal_or_below_of = scope:councillor_liege
-							} 
-							scope:county.holder = scope:councillor_liege
-						}
-					}
-				}
-			}
-			chaplain_throw_move = yes
 		}
 	}
 }
