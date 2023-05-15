@@ -6,10 +6,19 @@
 	ai_county_target = realm
 	task_progress = task_progress_percentage
 	highlight_own_realm = yes
-	restart_on_finish = no
 
 	effect_desc = {
 		desc = task_conversion_effect_desc
+		triggered_desc = {
+			trigger = {
+				scope:councillor_liege = {
+					any_vassal = {
+						has_vassal_stance = minority
+					}
+				}
+			}
+			desc = minority_disapproves_conversion_tooltip
+		}
 		desc = {
 			desc = council_task_possible_side_effects
 			triggered_desc = {
@@ -275,7 +284,10 @@
 			NOT = { faith = scope:councillor.faith }
 			trigger_if = {
 				limit = {
-					scope:councillor_liege = { has_variable = hold_court_8120_religion_block }
+					scope:councillor_liege = {
+						is_alive = yes
+						has_variable = hold_court_8120_religion_block
+					}
 				}
 				custom_tooltip = {
 					text = hold_court_8120_conversion_tt
@@ -421,7 +433,7 @@
 					scope:councillor_liege = {
 						is_ai = yes
 						faith = faith:ashari
-						capital_province = { geographical_region = world_europe_west_iberia }
+						capital_province ?= { geographical_region = world_europe_west_iberia }
 						scope:county.faith = faith:muwalladi
 					}
 					scope:county = {
@@ -510,6 +522,27 @@
 	}
 
 	on_finish_task_county = {
+		scope:councillor_liege = {
+			if = {
+				limit = {
+					any_vassal = {
+						has_vassal_stance = minority
+					}
+				}
+				custom_tooltip = minority_disapproves_conversion
+				hidden_effect = {
+					every_vassal = {
+						limit = {
+							has_vassal_stance = minority
+						}
+						add_opinion = {
+							target = scope:councillor_liege
+							modifier = minority_disapproves_of_conversion_opinion
+						}
+					}
+				}
+			}
+		}
 		scope:county = {
 			set_county_faith = scope:councillor.faith
 		}
@@ -526,25 +559,6 @@
 	}
 
 	monthly_on_action = task_convert_side_effects
-
-	on_cancel_task_county = {
-		if = {
-			limit = {
-				OR = {
-					scope:county.faith = scope:councillor_liege.faith
-					NOT = {
-						OR = {
-							scope:county.holder = {
-								is_vassal_or_below_of = scope:councillor_liege
-							} 
-							scope:county.holder = scope:councillor_liege
-						}
-					}
-				}
-			}
-			chaplain_throw_move = yes
-		}
-	}
 
 	ai_will_do = {
 		value = 1000 # Always convert if possible

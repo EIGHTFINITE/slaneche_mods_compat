@@ -13,6 +13,16 @@
 			desc = task_promote_culture_effect_desc
 			triggered_desc = {
 				trigger = {
+					scope:councillor_liege = {
+						any_vassal = {
+							has_vassal_stance = minority
+						}
+					}
+				}
+				desc = minority_disapproves_conversion_tooltip
+			}
+			triggered_desc = {
+				trigger = {
 					trigger_if = {
 						limit = { exists = scope:county }
 						scope:county = {
@@ -410,6 +420,35 @@
 	}
 
 	on_finish_task_county = {
+		scope:councillor_liege = {
+			if = {
+				limit = {	
+					NOT = {
+						culture = {
+							is_hybrid_culture = yes
+							any_parent_culture = {
+								this = scope:county.culture
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						is_independent_ruler = no
+					}
+					add_character_flag = {
+						flag = no_ai_culture_convert
+						years = 60
+					}
+				}
+				else = {
+					add_character_flag = {
+						flag = no_ai_culture_convert
+						years = 30
+					}
+				}
+			}
+		}
 		scope:county = {
 			if = {
 				limit = {
@@ -432,29 +471,12 @@
 			}
 			set_county_culture = scope:councillor_liege.culture
 		}
+		scope:councillor = {
+			start_default_task = yes
+		}
 	}
 
 	monthly_on_action = task_promote_culture_side_effects
-
-
-	on_cancel_task_county = {
-		if = {
-			limit = {
-				OR = {
-					scope:county.culture = scope:councillor_liege.culture
-					NOT = {
-						OR = {
-							scope:county.holder = {
-								is_vassal_or_below_of = scope:councillor_liege
-							} 
-							scope:county.holder = scope:councillor_liege
-						}
-					}
-				}
-			}
-			steward_throw_move = yes
-		}
-	}
 
 	ai_will_do = {
 		value = 0
