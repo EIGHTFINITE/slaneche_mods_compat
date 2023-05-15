@@ -4,6 +4,6 @@ tags={
 }
 name="Auto Promote + MGR Compatch"
 picture="thumbnail.png"
-supported_version="1.8.1"
+supported_version="1.9.*"
 path="mod/auto_promote_compat"
 remote_file_id="2772172341"
