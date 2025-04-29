@@ -6,13 +6,7 @@
 	ai_county_target = realm
 	task_progress = task_progress_percentage
 	highlight_own_realm = yes
-
-	asset = {
-		icon = "gfx/interface/icons/council_task_types/task_conversion.dds"
-		background = "gfx/interface/buttons/button_round_bg.dds"
-		frame = "gfx/interface/buttons/button_round_frame.dds"
-		glow = "gfx/particles/halo.dds"
-	}
+	restart_on_finish = no
 
 	effect_desc = {
 		desc = task_conversion_effect_desc
@@ -270,6 +264,24 @@
 		# Conversion speed game rules
 		if = {
 			limit = {
+				has_game_rule = no_faith_conversion
+			}
+			multiply = {
+				value = 0
+				desc = GAME_RULE_SLOWER_REASON
+			}
+		}
+		if = {
+			limit = {
+				has_game_rule = extremely_slow_faith_conversion_speed
+			}
+			multiply = {
+				value = 0.10 #significantly_slower_game_rule_value
+				desc = GAME_RULE_EXTREMELY_SLOW_REASON
+			}
+		}		
+		if = {
+			limit = {
 				has_game_rule = slower_faith_conversion_speed
 			}
 			multiply = {
@@ -288,7 +300,13 @@
 		}
 		if = {
 			limit = {
-				has_game_rule = faster_faith_conversion_speed
+				OR = {
+					has_game_rule = faster_faith_conversion_speed
+					AND = {
+						has_game_rule = faster_faith_conversion_speed_pl
+						scope:councillor.liege = { is_ai = no }
+					}
+				}
 			}
 			multiply = {
 				value = faster_game_rule_value
@@ -297,7 +315,14 @@
 		}
 		if = {
 			limit = {
-				has_game_rule = significantly_faster_faith_conversion_speed
+				OR = {
+					has_game_rule = significantly_faster_faith_conversion_speed
+					AND = {
+						has_game_rule = significantly_faster_faith_conversion_speed_pl
+						scope:councillor.liege = { is_ai = no }
+					}
+				}
+
 			}
 			multiply = {
 				value = significantly_faster_game_rule_value
@@ -333,7 +358,8 @@
 		}
 	}
 
-	potential_county = { 
+	potential_county = {
+		NOT = { has_game_rule = no_faith_conversion }
 		scope:county = {
 			NOT = { faith = scope:councillor.faith }
 			trigger_if = {
@@ -671,6 +697,23 @@
 		trigger_event = {
 			id = court_chaplain_task.8001
 			days = 1 # To ensure it does not fire at the same time as the finish message (both cancel and finish are fired on_finish_task_county)
+		}
+		
+		if = {
+			limit = {
+				OR = {
+					scope:county.faith = scope:councillor_liege.faith
+					NOT = {
+						OR = {
+							scope:county.holder = {
+								is_vassal_or_below_of = scope:councillor_liege
+							} 
+							scope:county.holder = scope:councillor_liege
+						}
+					}
+				}
+			}
+			chaplain_throw_move = yes
 		}
 	}
 
