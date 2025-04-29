@@ -10,13 +10,6 @@
 	highlight_own_realm = yes
 	restart_on_finish = yes # If it "finishes" by removing a corruption modifier, there'll still be control to regain
 
-	asset = {
-		icon = "gfx/interface/icons/council_task_types/task_increase_control.dds"
-		background = "gfx/interface/buttons/button_round_bg.dds"
-		frame = "gfx/interface/buttons/button_round_frame.dds"
-		glow = "gfx/particles/halo.dds"
-	}
-
 	effect_desc = {
 		desc = task_increase_control_effect_desc
 		desc = {
@@ -261,6 +254,28 @@
 			}
 		}
 	}
+	
+	on_cancel_task_county = {
+		if = {
+			limit = {
+				auto_increase_control_compatibility = yes
+				NOT = {
+					scope:county = {
+						custom_description = {
+							text = potential_county_control_task_trigger
+							OR = {
+								has_county_corruption_trigger = yes
+								county_control < full_county_control
+							}
+						}
+						monthly_county_control_growth_factor > 0
+					}
+				}
+			}
+			marshal_throw_move = yes
+		}
+	}
+
 	on_finish_task_county = {
 		if = {
 			limit = {
