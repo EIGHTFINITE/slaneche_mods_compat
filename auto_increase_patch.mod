@@ -4,6 +4,6 @@ tags={
 }
 name="Auto Increase Patch"
 picture="thumbnail.png"
-supported_version="1.16.*"
+supported_version="1.*.*"
 path="mod/auto_increase_patch"
 remote_file_id="3472730253"

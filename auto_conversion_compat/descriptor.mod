@@ -4,5 +4,5 @@ tags={
 }
 name="Auto Conversion + MGR Compatch"
 picture="thumbnail.png"
-supported_version="1.16.*"
+supported_version="1.*.*"
 remote_file_id="2772157830"
