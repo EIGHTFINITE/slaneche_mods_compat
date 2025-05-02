@@ -7,13 +7,6 @@
 	task_progress = task_progress_percentage
 	restart_on_finish = yes
 	highlight_own_realm = yes
-
-	asset = {
-		icon = "gfx/interface/icons/council_task_types/task_promote_culture.dds"
-		background = "gfx/interface/buttons/button_round_bg.dds"
-		frame = "gfx/interface/buttons/button_round_frame.dds"
-		glow = "gfx/particles/halo.dds"
-	}
 	
 	effect_desc = {
 		desc = {
@@ -143,6 +136,16 @@
 		# Conversion speed game rules
 		if = {
 			limit = {
+				has_game_rule = no_culture_conversion
+			}
+			multiply = {
+				value = 0
+				desc = GAME_RULE_EXTREMELY_SLOW_REASON
+			}
+		}
+
+		if = {
+			limit = {
 				has_game_rule = slower_culture_conversion_speed
 			}
 			multiply = {
@@ -161,20 +164,42 @@
 		}
 		if = {
 			limit = {
-				has_game_rule = significantly_faster_culture_conversion_speed
+				has_game_rule = extremely_slow_culture_conversion_speed
 			}
 			multiply = {
-				value = significantly_faster_game_rule_value
-				desc = GAME_RULE_SIGNIFICANTLY_FASTER_REASON
+				value = 0.10 #significantly_slower_game_rule_value
+				desc = GAME_RULE_EXTREMELY_SLOW_REASON
 			}
 		}
 		if = {
 			limit = {
-				has_game_rule = faster_culture_conversion_speed
+				OR = {
+					has_game_rule = faster_culture_conversion_speed
+					AND = {
+						has_game_rule = faster_culture_conversion_speed_pl
+						scope:councillor.liege = { is_ai = no }
+					}
+				}
 			}
 			multiply = {
 				value = faster_game_rule_value
 				desc = GAME_RULE_FASTER_REASON
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					has_game_rule = significantly_faster_culture_conversion_speed
+					AND = {
+						has_game_rule = significantly_faster_culture_conversion_speed_pl
+						scope:councillor.liege = { is_ai = no }
+					}
+				}
+
+			}
+			multiply = {
+				value = significantly_faster_game_rule_value
+				desc = GAME_RULE_SIGNIFICANTLY_FASTER_REASON
 			}
 		}
 		# Faster conversion for FP2 Hostility ending, if county is in Iberia and culture was involved
@@ -233,6 +258,7 @@
 	}
 
 	potential_county = {
+		NOT = { has_game_rule = no_culture_conversion }
 		scope:county = {
 			NOT = { culture = scope:councillor_liege.culture }
 			trigger_if = {
