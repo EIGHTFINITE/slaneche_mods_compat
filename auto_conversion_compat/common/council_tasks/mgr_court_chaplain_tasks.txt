@@ -7,6 +7,13 @@
 	task_progress = task_progress_percentage
 	highlight_own_realm = yes
 
+	asset = {
+		icon = "gfx/interface/icons/council_task_types/task_conversion.dds"
+		background = "gfx/interface/buttons/button_round_bg.dds"
+		frame = "gfx/interface/buttons/button_round_frame.dds"
+		glow = "gfx/particles/halo.dds"
+	}
+
 	effect_desc = {
 		desc = task_conversion_effect_desc
 		triggered_desc = {
@@ -263,24 +270,6 @@
 		# Conversion speed game rules
 		if = {
 			limit = {
-				has_game_rule = no_faith_conversion
-			}
-			multiply = {
-				value = 0
-				desc = GAME_RULE_SLOWER_REASON
-			}
-		}
-		if = {
-			limit = {
-				has_game_rule = extremely_slow_faith_conversion_speed
-			}
-			multiply = {
-				value = 0.10 #significantly_slower_game_rule_value
-				desc = GAME_RULE_EXTREMELY_SLOW_REASON
-			}
-		}		
-		if = {
-			limit = {
 				has_game_rule = slower_faith_conversion_speed
 			}
 			multiply = {
@@ -299,13 +288,7 @@
 		}
 		if = {
 			limit = {
-				OR = {
-					has_game_rule = faster_faith_conversion_speed
-					AND = {
-						has_game_rule = faster_faith_conversion_speed_pl
-						scope:councillor.liege = { is_ai = no }
-					}
-				}
+				has_game_rule = faster_faith_conversion_speed
 			}
 			multiply = {
 				value = faster_game_rule_value
@@ -314,14 +297,7 @@
 		}
 		if = {
 			limit = {
-				OR = {
-					has_game_rule = significantly_faster_faith_conversion_speed
-					AND = {
-						has_game_rule = significantly_faster_faith_conversion_speed_pl
-						scope:councillor.liege = { is_ai = no }
-					}
-				}
-
+				has_game_rule = significantly_faster_faith_conversion_speed
 			}
 			multiply = {
 				value = significantly_faster_game_rule_value
@@ -357,8 +333,7 @@
 		}
 	}
 
-	potential_county = {
-		NOT = { has_game_rule = no_faith_conversion }
+	potential_county = { 
 		scope:county = {
 			NOT = { faith = scope:councillor.faith }
 			trigger_if = {
