@@ -22,7 +22,7 @@
 				trigger = {
 					scope:councillor_liege = {
 						any_vassal = {
-							has_vassal_stance = minority
+							vassal_stance = minority
 						}
 					}
 				}
@@ -33,7 +33,7 @@
 					trigger_if = {
 						limit = { exists = scope:county }
 						scope:county = {
-							NOT = { culture = scope:councillor_liege.culture }
+							culture != scope:councillor_liege.culture
 						}
 						NOT = {
 							scope:councillor_liege.culture = {
@@ -112,6 +112,10 @@
 				desc = task_promote_culture_resistance_to_administration
 			}
 		}
+	}
+
+	is_valid_showing_failures_only = {
+		tgp_natural_disaster_councillor_available_for_task_trigger = yes
 	}
 
 	progress = {
@@ -267,14 +271,15 @@
 	potential_county = {
 		NOT = { has_game_rule = no_culture_conversion }
 		scope:county = {
-			NOT = { culture = scope:councillor_liege.culture }
+			is_landless_type_title = no
+			culture != scope:councillor_liege.culture
 			trigger_if = {
 				limit = {
 					scope:councillor_liege = { has_variable = hold_court_8130_culture_block }
 				}
 				custom_tooltip = {
 					text = hold_court_8130_conversion_tt
-					NOT = { culture = scope:councillor_liege.var:hold_court_8130_culture_block }
+					culture != scope:councillor_liege.var:hold_court_8130_culture_block
 				}
 			}
 		}
@@ -375,6 +380,12 @@
 						scope:county.culture = culture:polabian
 						NOT = { scope:councillor_liege.primary_title = title:e_hre }
 					}
+
+					AND = {
+						# Japanese rulers should convert Emishi counties
+						culture = culture:japanese
+						scope:county.culture = culture:emishi
+					}
 				}
 				OR = {
 					is_independent_ruler = yes
@@ -442,6 +453,11 @@
 						scope:county.culture = culture:polabian
 						NOT = { scope:councillor_liege.primary_title = title:e_hre }
 					}
+					AND = {
+						# Japanese rulers should convert Emishi counties
+						culture = culture:japanese
+						scope:county.culture = culture:emishi
+					}
 				}
 			}
 			OR = {
@@ -496,6 +512,11 @@
 					scope:county.culture = culture:polabian
 					NOT = { scope:councillor_liege.primary_title = title:e_hre }
 				}
+				AND = {
+					# Japanese rulers should convert Emishi counties
+					scope:councillor_liege.culture = culture:japanese
+					scope:county.culture = culture:emishi
+				}
 			}
 		}
 		trigger_else_if = { # But AI Directives should still try to look pretty
@@ -543,7 +564,7 @@
 				}
 				if = {
 					limit = {
-						is_independent_ruler = no
+						top_liege != this
 					}
 					add_character_flag = {
 						flag = no_ai_culture_convert
@@ -635,6 +656,10 @@
 								capital_county.kingdom = title:k_saxony
 								capital_county.kingdom = title:k_pomerania
 							}
+						}
+						AND = {
+							culture = culture:japanese
+							capital_county.empire = title:e_japan
 						}
 						AND = {
 							culture = {
