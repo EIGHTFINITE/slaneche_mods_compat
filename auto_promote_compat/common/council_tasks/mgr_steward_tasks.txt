@@ -147,16 +147,6 @@
 		# Conversion speed game rules
 		if = {
 			limit = {
-				has_game_rule = no_culture_conversion
-			}
-			multiply = {
-				value = 0
-				desc = GAME_RULE_EXTREMELY_SLOW_REASON
-			}
-		}
-
-		if = {
-			limit = {
 				has_game_rule = slower_culture_conversion_speed
 			}
 			multiply = {
@@ -175,42 +165,20 @@
 		}
 		if = {
 			limit = {
-				has_game_rule = extremely_slow_culture_conversion_speed
-			}
-			multiply = {
-				value = 0.10 #significantly_slower_game_rule_value
-				desc = GAME_RULE_EXTREMELY_SLOW_REASON
-			}
-		}
-		if = {
-			limit = {
-				OR = {
-					has_game_rule = faster_culture_conversion_speed
-					AND = {
-						has_game_rule = faster_culture_conversion_speed_pl
-						scope:councillor.liege = { is_ai = no }
-					}
-				}
-			}
-			multiply = {
-				value = faster_game_rule_value
-				desc = GAME_RULE_FASTER_REASON
-			}
-		}
-		if = {
-			limit = {
-				OR = {
-					has_game_rule = significantly_faster_culture_conversion_speed
-					AND = {
-						has_game_rule = significantly_faster_culture_conversion_speed_pl
-						scope:councillor.liege = { is_ai = no }
-					}
-				}
-
+				has_game_rule = significantly_faster_culture_conversion_speed
 			}
 			multiply = {
 				value = significantly_faster_game_rule_value
 				desc = GAME_RULE_SIGNIFICANTLY_FASTER_REASON
+			}
+		}
+		if = {
+			limit = {
+				has_game_rule = faster_culture_conversion_speed
+			}
+			multiply = {
+				value = faster_game_rule_value
+				desc = GAME_RULE_FASTER_REASON
 			}
 		}
 		# Faster conversion for FP2 Hostility ending, if county is in Iberia and culture was involved
@@ -269,7 +237,6 @@
 	}
 
 	potential_county = {
-		NOT = { has_game_rule = no_culture_conversion }
 		scope:county = {
 			is_landless_type_title = no
 			culture != scope:councillor_liege.culture
@@ -601,21 +568,8 @@
 			}
 			set_county_culture = scope:councillor_liege.culture
 		}
-		if = {
-			limit = {
-				OR = {
-					scope:county.culture = scope:councillor_liege.culture
-					NOT = {
-						OR = {
-							scope:county.holder = {
-								is_vassal_or_below_of = scope:councillor_liege
-							} 
-							scope:county.holder = scope:councillor_liege
-						}
-					}
-				}
-			}
-			steward_throw_move = yes
+		scope:councillor = {
+			start_default_task = yes
 		}
 	}
 
