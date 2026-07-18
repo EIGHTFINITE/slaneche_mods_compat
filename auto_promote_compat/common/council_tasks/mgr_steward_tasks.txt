@@ -568,9 +568,7 @@
 			}
 			set_county_culture = scope:councillor_liege.culture
 		}
-		scope:councillor = {
-			start_default_task = yes
-		}
+		steward_throw_move = yes
 	}
 
 	monthly_on_action = task_promote_culture_side_effects
@@ -700,23 +698,6 @@
 				has_character_flag = agenda_towards_deescalation
 			}
 			add = -250
-		}
-		if = {
-			# Don't do this too often
-			limit = {
-				scope:councillor_liege = {
-					has_character_flag = no_ai_culture_convert
-					NAND = { # ignore it if in Hostility with escalation
-						has_character_flag = agenda_towards_escalation
-						any_character_struggle = {
-							involvement = involved
-							is_struggle_type = iberian_struggle
-							is_struggle_phase = struggle_iberia_phase_hostility
-						}
-					}
-				}
-			}
-			multiply = 0
 		}
 		if = {
 			# Interrupt this task if you're bankrupt
